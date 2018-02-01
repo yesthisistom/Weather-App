@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+<form action="{{ url_for('getWeather')}}" method="post">
+    <p>Location (Lat,Lon)</p>
+
+    <input type="text" name="location" placeholder="38.8048,-77.0469">
+    <input type="submit" value="Submit">
+</form>
+
+<br><br>
+{% for forecast in weather %}
+{{forecast["name"]}}:  {{ forecast["shortForecast"] }}, {{ forecast["temperature"]}}{{ forecast["temperatureUnit"]}} <br>
+{% endfor %}
+
+</body>
+</html>
