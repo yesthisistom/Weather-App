@@ -2,21 +2,102 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title></title>
+
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='bootstrap.min.css') }}">
+    <style>
+
+        #error{
+            color:red;
+        }
+
+    </style>
 </head>
 <body>
 
-<form action="{{ url_for('getWeather')}}" method="post">
-    <p>Location (Lat,Lon)</p>
+<div style="background-color:black;">
+<div class="container" style="background-color:black;">
+<div class="row align-items-center" >
 
-    <input type="text" name="location" placeholder="38.8048,-77.0469">
-    <input type="submit" value="Submit">
-</form>
 
-<br><br>
-{% for forecast in weather %}
-{{forecast["name"]}}:  {{ forecast["shortForecast"] }}, {{ forecast["temperature"]}}{{ forecast["temperatureUnit"]}} <br>
-{% endfor %}
+    <div class="col">
 
+        <br>
+    <form class="form-inline" action="{{ url_for('get_weather')}}" method="post">
+        <input class="form-control mb-2 mr-sm-2 mb-sm-0" type="text" name="location" placeholder="Alexandria, VA">
+
+        <button class="btn btn-primary" type="submit" value="Submit">Get Weather</button>
+    </form>
+    </div>
+
+    <div class="col" id="error">
+    <!--MESSAGE FLASHING EXAMPLE -->
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+
+            <br>
+            {% for message in messages %}
+            {% if message %}
+            {{message}} <br>
+            {% endif %}
+            {% endfor %}
+
+        {% endif %}
+        {% endwith %}
+
+    </div>
+    </div>
+</div>
+<br>
+</div>
+
+<div class="container">
+
+
+    <div class="row">
+
+        <div class="col">
+        <br><br>
+
+
+
+        <h4><center>{{", ".join(location)}}</center></h4>
+        <br>
+
+        <div class="row">
+            <div class="col">
+                {% if weather %}
+                    <table class="table table-striped"><tbody>
+                    {% for forecast in weather[0] %}
+                    <tr>
+                        <td style="white-space: nowrap;color:gray;">{{forecast["name"]}}</td>
+                        <td class="text-right">{{ forecast["shortForecast"] }}, {{ forecast["temperature"]}}{{ forecast["temperatureUnit"]}}</td>
+                    </tr>
+                    {% endfor %}
+
+                    </tbody></table>
+                {% endif %}
+            </div>
+            <div class="col">
+            {% if weather %}
+                <table class="table table-striped"><tbody>
+                    {% for forecast in weather[1][:15] %}
+
+                    <tr>
+                        <td style="white-space: nowrap;color:gray;">{{forecast["endTime"]}}</td>
+                        <td class="text-right">{{ forecast["shortForecast"] }}, {{ forecast["temperature"]}}{{ forecast["temperatureUnit"]}}</td>
+                    </tr>
+                    {% endfor %}
+                {% endif %}
+                </tbody></table>
+                </div>
+
+            </div>
+            </div>
+    </div>
+
+</div>
 </body>
 </html>
