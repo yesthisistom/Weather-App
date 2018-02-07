@@ -49,6 +49,6 @@ def get_weather():
         return render_template('index.html')
 
 if __name__ == '__main__':
-    app.secret_key = 'still butts'
+    app.secret_key = ''
     app.debug = True
     app.run(host='0.0.0.0', port=80)

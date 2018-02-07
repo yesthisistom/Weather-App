@@ -7,11 +7,10 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 
-
 class Geocode:
 
     def __init__(self):
-        self._google_api_key = 'AIzaSyA_Ji-qVkLwMNWfla6gs6c7sWZhGla617I'
+        self._google_api_key = ''
         self._bing_api_key = None
 
         self._engine = create_engine('sqlite:///locations.db')
