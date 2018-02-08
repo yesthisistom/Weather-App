@@ -40,10 +40,15 @@ class GeoLocation(Base):
         self.country = loc_json["country"]
         self.postal = loc_json["postal"]
 
-    def get_address_str(self):
-        location_str = [self.neighborhood, self.city, self.state, self.postal, self.country]
+    def get_address_str(self, join_count=None):
+        location_list = [self.neighborhood, self.city, self.state, self.postal, self.country]
+        location_list = list(filter(lambda x: x.strip() != "", location_list))
 
-        return list(filter(lambda x: x.strip() != "", location_str))
+        if join_count:
+            if len(location_list) >= join_count:
+                return ", ".join(location_list[:join_count])
+
+        return ", ".join(location_list)
 
 
 engine = create_engine('sqlite:///locations.db')

@@ -19,21 +19,25 @@ def getWeather(latitude,longitude):
     info_url = api_url + str(latitude) + "," + str(longitude)
     try:
         info_request = requests.get(info_url)
-
         if info_request.status_code == 200:
             forecast_url = info_request.json()["properties"]["forecast"]
-            forecast_hourly = info_request.json()["properties"]["forecastHourly"]
-
+            
             weather_result = requests.get(forecast_url)
-            weather_hourly = requests.get(forecast_hourly)
+            
             if weather_result.status_code == 200:
-                hourly_periods = weather_hourly.json()["properties"]["periods"]
-                for period in hourly_periods:
-                    period["endTime"] = parser.parse(period["endTime"]).strftime("%A %I %p").lstrip("0").replace(" 0", " ")
+                hourly_periods = None
+                try:
+                    forecast_hourly = info_request.json()["properties"]["forecastHourly"]
+                    weather_hourly = requests.get(forecast_hourly)
+                    hourly_periods = weather_hourly.json()["properties"]["periods"]
+                    for period in hourly_periods:
+                        period["endTime"] = parser.parse(period["endTime"]).strftime("%A %I %p").lstrip("0").replace(" 0", " ")
+                except:
+                    print("No hourly for ", latitude,longitude)
 
                 return weather_result.json()["properties"]["periods"], hourly_periods
     except:
-        print("Exception caught")
+        print("Exception caught in Weather.getWeather")
 
 
 if __name__ == "__main__":

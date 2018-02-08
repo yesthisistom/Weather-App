@@ -12,6 +12,12 @@
         #error{
             color:red;
         }
+        #user-info{
+            color:gray;
+        }
+        .lightgray-table{
+            color:lightgray;
+        }
 
     </style>
 </head>
@@ -23,13 +29,14 @@
 
 
     <div class="col">
-
+        <br>
         <br>
     <form class="form-inline" action="{{ url_for('get_weather')}}" method="post">
-        <input class="form-control mb-2 mr-sm-2 mb-sm-0" type="text" name="location" placeholder="Alexandria, VA">
+        <input class="form-control mb-2 mr-sm-2 mb-sm-0" type="text" name="location" placeholder="{% if geocode %} {{ geocode.get_address_str(2)}} {% else %} Alexandria, VA {% endif %}">
 
         <button class="btn btn-primary" type="submit" value="Submit">Get Weather</button>
     </form>
+        <br><br>
     </div>
 
     <div class="col" id="error">
@@ -48,6 +55,28 @@
         {% endwith %}
 
     </div>
+    
+    <div class="col-push" id="user-info">
+        <table><tbody>
+        <tr>
+            <td class="text-right">IP: </td><td class="lightgray-table"> {{ip}}</td>
+        </tr>
+        {% if geocode %}
+        <tr>
+        <td class="text-right">Coordinate: </td><td class="lightgray-table"> {{"{:.5f}".format( geocode.latitude)}}, {{"{:.5f}".format( geocode.longitude)}}</td>
+        </tr><tr>
+        <td class="text-right">Location: </td> <td class="lightgray-table"> {{geocode.get_address_str()}}</td>
+        </tr>
+        {% endif %}
+        <tr>
+        <td class="text-right">Forecast Found: </td><td class="lightgray-table"> {% if weather and weather[0] %} True {% else %} False {%endif%} </td>
+        </tr><tr>
+        <td class="text-right">Hourly Forecast Found: </td><td class="lightgray-table"> {% if weather and weather[1] %} True {% else %} False {%endif%}</td>
+        </tr>
+
+        </tbody>
+        </table>
+    </div>
     </div>
 </div>
 <br>
@@ -62,13 +91,13 @@
         <br><br>
 
 
-
-        <h4><center>{{", ".join(location)}}</center></h4>
+        {% if geocode and weather %}
+        <h4><center>{{geocode.get_address_str()}}</center></h4>
         <br>
-
+        {% endif %}
         <div class="row">
             <div class="col">
-                {% if weather %}
+                {% if weather and weather[0]%}
                     <table class="table table-striped"><tbody>
                     {% for forecast in weather[0] %}
                     <tr>
@@ -81,7 +110,7 @@
                 {% endif %}
             </div>
             <div class="col">
-            {% if weather %}
+            {% if weather and weather[1]%}
                 <table class="table table-striped"><tbody>
                     {% for forecast in weather[1][:15] %}
 

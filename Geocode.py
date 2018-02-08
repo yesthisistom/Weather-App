@@ -2,6 +2,7 @@ __author__ = 'tv'
 
 from GeoLocation import GeoLocation, Base
 
+import json
 import geocoder
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -10,8 +11,13 @@ from sqlalchemy.orm import sessionmaker
 class Geocode:
 
     def __init__(self):
-        self._google_api_key = ''
+        self._google_api_key = None
         self._bing_api_key = None
+
+        with open("geocode_config.json") as file_hdl:
+            config_dict = json.load(file_hdl)
+            self._google_api_key = config_dict["geocode-config"]["google-api-key"]
+            self._bing_api_key = config_dict["geocode-config"]["bing-api-key"]
 
         self._engine = create_engine('sqlite:///locations.db')
         Base.metadata.bind = self._engine
@@ -39,7 +45,9 @@ class Geocode:
         if g.error:
             return None
 
-        geo_loc = GeoLocation(g, coordinate)
+        request = str(coordinate[0]) + "," + str(coordinate[1])
+        
+        geo_loc = GeoLocation(g, request)
         self._session.add(geo_loc)
         self._session.commit()
         return geo_loc
@@ -49,7 +57,7 @@ class Geocode:
 
         if g.error:
             return None
-
+    
         geo_loc = GeoLocation(g, location)
         self._session.add(geo_loc)
         self._session.commit()
