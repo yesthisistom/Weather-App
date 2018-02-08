@@ -56,22 +56,22 @@
 
     </div>
     
-    <div class="col-push" id="user-info">
-        <table><tbody>
+    <div class="col-push col-xs-pull col-sm-pull" id="user-info">
+        <table style="margin-left: 15px;"><tbody>
         <tr>
-            <td class="text-right">IP: </td><td class="lightgray-table"> {{ip}}</td>
+            <td class="text-sm-right">IP: </td><td class="lightgray-table"> {{ip}}</td>
         </tr>
         {% if geocode %}
         <tr>
-        <td class="text-right">Coordinate: </td><td class="lightgray-table"> {{"{:.5f}".format( geocode.latitude)}}, {{"{:.5f}".format( geocode.longitude)}}</td>
+        <td class="text-sm-right">Coordinate: </td><td class="lightgray-table"> {{"{:.5f}".format( geocode.latitude)}}, {{"{:.5f}".format( geocode.longitude)}}</td>
         </tr><tr>
-        <td class="text-right">Location: </td> <td class="lightgray-table"> {{geocode.get_address_str()}}</td>
+        <td class="text-sm-right">Location: </td> <td class="lightgray-table"> {{geocode.get_address_str()}}</td>
         </tr>
         {% endif %}
         <tr>
-        <td class="text-right">Forecast Found: </td><td class="lightgray-table"> {% if weather and weather[0] %} True {% else %} False {%endif%} </td>
+        <td class="text-sm-right">Forecast Found: </td><td class="lightgray-table"> {% if weather and weather[0] %} True {% else %} False {%endif%} </td>
         </tr><tr>
-        <td class="text-right">Hourly Forecast Found: </td><td class="lightgray-table"> {% if weather and weather[1] %} True {% else %} False {%endif%}</td>
+        <td class="text-sm-right">Hourly Forecast Found: </td><td class="lightgray-table"> {% if weather and weather[1] %} True {% else %} False {%endif%}</td>
         </tr>
 
         </tbody>
